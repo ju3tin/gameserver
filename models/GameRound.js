@@ -1,3 +1,6 @@
+const mongoose = require('mongoose'); // << THIS LINE IS REQUIRED
+
+
 const BetSchema = new mongoose.Schema({
   walletAddress: { type: String, required: true },
   amount: Number,
