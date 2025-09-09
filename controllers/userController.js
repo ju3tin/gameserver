@@ -14,19 +14,19 @@ const handleCreateUser = async (ws, data) => {
       return ws.send(JSON.stringify({ action: 'ERROR', message: 'Username or wallet address already exists.' }));
     }
 
-    const user = new User({
+    const user1 = new User({
       username,
       walletAddress,
       balances: { SOL: 1000, CHIPPY: 1000, DEMO: 1000 }
     });
-    await user.save();
+    await user1.save();
 
     ws.send(JSON.stringify({
       action: 'USER_CREATED',
-      userId: user._id,
-      username: user.username,
-      walletAddress: user.walletAddress,
-      balances: user.balances
+      userId: user1._id,
+      username: user1.username,
+      walletAddress: user1.walletAddress,
+      balances: user1.balances
     }));
   } catch (err) {
     console.error(err);
