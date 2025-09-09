@@ -1,16 +1,23 @@
 const User = require('../models/User');
 
 const handleCreateUser = async (ws, data) => {
-  const { username } = data;
-  if (!username) return ws.send(JSON.stringify({ action: 'ERROR', message: 'Username required.' }));
+  const { username, walletAddress } = data;
+
+  if (!username || !walletAddress) {
+    return ws.send(JSON.stringify({ action: 'ERROR', message: 'Username and wallet address are required.' }));
+  }
 
   try {
-    const existingUser = await User.findOne({ username });
-    if (existingUser) return ws.send(JSON.stringify({ action: 'ERROR', message: 'Username exists.' }));
+    // Check if username or wallet already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { walletAddress }] });
+    if (existingUser) {
+      return ws.send(JSON.stringify({ action: 'ERROR', message: 'Username or wallet address already exists.' }));
+    }
 
     const user = new User({
       username,
-      balances: { SOL: 1000, CHIPPY: 1000, DEMO: 1000 },
+      walletAddress,
+      balances: { SOL: 1000, CHIPPY: 1000, DEMO: 1000 }
     });
     await user.save();
 
@@ -18,6 +25,7 @@ const handleCreateUser = async (ws, data) => {
       action: 'USER_CREATED',
       userId: user._id,
       username: user.username,
+      walletAddress: user.walletAddress,
       balances: user.balances
     }));
   } catch (err) {
