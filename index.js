@@ -31,11 +31,11 @@ wss.on('connection', (ws) => {
           break;
 
         case 'PLACE_BET':
-          await GameController.handleBet(ws, data);
+          await GameController.handleBet(ws, data, wss);
           break;
 
         case 'FINISH_BET':
-          await GameController.handleCashout(ws, data);
+          await GameController.handleCashout(ws, data, wss);
           break;
 
         default:
