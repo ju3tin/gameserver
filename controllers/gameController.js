@@ -28,6 +28,7 @@ const startGame = async (wss) => {
   // Countdown 10 seconds
   let countdown = 10;
   const countdownInterval = setInterval(() => {
+    if (countdown == 10) {broadcast(wss, { action: 'ROUND_PREPARING' });}
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
