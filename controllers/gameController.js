@@ -45,7 +45,7 @@ const startGame = async (wss) => {
 
     const interval = setInterval(async () => {
       currentMultiplier = parseFloat((currentMultiplier + 0.01).toFixed(2));
-      broadcast(wss, { action: 'CNT_MULTIPLY', multiplier: currentMultiplier.toFixed(2) });
+      broadcast(wss, { action: 'CNT_MULTIPLY', multiplier: currentMultiplier.toFixed(2), data: currentMultiplier.toFixed(2) });
 
       if (currentMultiplier >= crashPoint) {
         clearInterval(interval);
