@@ -96,7 +96,7 @@ const handleBet = async (ws, data) => {
   await round.save();
 
   ws.send(JSON.stringify({ action: 'BET_PLACED', walletAddress, amount, currency, balance: user.balances[currency] }));
-  broadcast(wss, { action: 'PLAYER_BET', walletAddress, amount, currency });
+  broadcast(ws._wss, { action: 'PLAYER_BET', walletAddress, amount, currency });
 };
 
 // --- Handle Cashout ---
@@ -121,7 +121,7 @@ const handleCashout = async (ws, data) => {
 
   ws.send(JSON.stringify({ action: 'CASHOUT_SUCCESS', walletAddress, currency: bet.currency, winnings, balance: user.balances[bet.currency], multiplier: currentMultiplier.toFixed(2) }));
 
-  broadcast(wss, { action: 'PLAYER_CASHED_OUT', walletAddress, winnings, multiplier: currentMultiplier.toFixed(2) });
+  broadcast(ws._wss, { action: 'PLAYER_CASHED_OUT', walletAddress, winnings, multiplier: currentMultiplier.toFixed(2) });
 };
 
 module.exports = { startGame, handleBet, handleCashout };
