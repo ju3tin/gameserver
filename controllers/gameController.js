@@ -29,6 +29,7 @@ const startGame = async (wss) => {
   let countdown = 10;
   const countdownInterval = setInterval(() => {
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
+    broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
     if (countdown < 0) clearInterval(countdownInterval);
   }, 1000);
