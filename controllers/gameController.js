@@ -32,7 +32,7 @@ const startGame = async (wss) => {
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
- //   if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
+    if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
     if (countdown < 0) clearInterval(countdownInterval);
   }, 1000);
 
@@ -44,7 +44,7 @@ const startGame = async (wss) => {
     round.crashMultiplier = crashPoint;
     await round.save();
 
-    broadcast(wss, { action: 'ROUND_STARTED' });
+  //  broadcast(wss, { action: 'ROUND_STARTED', message: 'Round started!' });
 
     const interval = setInterval(async () => {
       currentMultiplier = parseFloat((currentMultiplier + 0.01).toFixed(2));
