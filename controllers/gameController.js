@@ -73,7 +73,8 @@ const endGame = async (wss, roundId) => {
 // --- Handle Bet ---
 const handleBet = async (ws, data, wss) => {
   const { walletAddress, amount, currency } = data;
-
+  if (!amount) return ws.send(JSON.stringify({ action: 'ERROR', message: 'Amount required.' }));
+  if (!currency) return ws.send(JSON.stringify({ action: 'ERROR', message: 'Currency required.' }));
   if (!walletAddress) return ws.send(JSON.stringify({ action: 'ERROR', message: 'Wallet address required.' }));
   if (gameState !== 'waiting') return ws.send(JSON.stringify({ action: 'ERROR', message: 'Bets can only be placed during waiting phase.' }));
 
