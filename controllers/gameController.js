@@ -27,12 +27,12 @@ const startGame = async (wss) => {
 
   // Countdown 10 seconds
   let countdown = 10;
-  const countdownInterval = setInterval(() => {
+  const countdownInterval = setInterval(async () => {
     if (countdown == 10) {broadcast(wss, { action: 'ROUND_PREPARING' });}
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
-    if (countdown < 0) delay(1000);
+    if (countdown < 0) await new Promise(resolve => setTimeout(resolve, 1000));
     if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
     if (countdown < 0) clearInterval(countdownInterval);
   }, 1000);
