@@ -32,6 +32,7 @@ const startGame = async (wss) => {
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
+    if (countdown < 0) delay(1000);
     if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
     if (countdown < 0) clearInterval(countdownInterval);
   }, 1000);
