@@ -33,14 +33,11 @@ const startGame = async (wss) => {
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
     if (countdown == 0) await new Promise(resolve => setTimeout(resolve, 1000));
+    if (countdown == 0) {broadcast(wss, { action: 'Justin_was_here'});}
     if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
     if (countdown < 0) clearInterval(countdownInterval);
   }, 1000);
-
-  setTimeOut(async () => {
-    gameState = 'justin_was_here'
-{broadcast(wss, { action: 'Justin_was_here'});}
-  }, 1000);
+  
 
   setTimeout(async () => {
     gameState = 'running';
