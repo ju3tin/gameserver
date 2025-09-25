@@ -26,11 +26,11 @@ const startGame = async (wss) => {
   broadcast(wss, { action: 'GAME_WAITING', message: 'Place your bets!' });
 
   // Countdown 10 seconds
-  let countdown = 11;
+  let countdown = 10;
   const countdownInterval = setInterval(async () => {
     if (countdown == 10) {broadcast(wss, { action: 'ROUND_PREPARING' });}
-    broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown - 1 });
-    broadcast(wss, { action: 'COUNTDOWN', time: countdown - 1 });
+    broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown + 1 });
+    broadcast(wss, { action: 'COUNTDOWN', time: countdown + 1 });
     countdown--;
     if (countdown == 0) await new Promise(resolve => setTimeout(resolve, 1000));
     if (countdown == 0) {broadcast(wss, { action: 'Justin_was_here'});}
