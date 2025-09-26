@@ -48,7 +48,7 @@ const startGame = async (wss) => {
     let timeElapsed = 0; // Track time since round started
     const interval = setInterval(async () => {
       // Dynamic increment: starts at 0.005, increases with time (e.g., quadratic growth)
-      const increment = 0.005 + 0.0001 * timeElapsed * timeElapsed; // Quadratic increase
+      const increment = 0.002 + 0.0001 * timeElapsed * timeElapsed; // Quadratic increase
       currentMultiplier = parseFloat((currentMultiplier + increment).toFixed(2));
       timeElapsed += 0.05; // Increment time by 50ms (0.05 seconds)
 
