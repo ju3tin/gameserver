@@ -28,17 +28,14 @@ const startGame = async (wss) => {
   // Countdown 10 seconds
   let countdown = 10;
   const countdownInterval = setInterval(async () => {
-    if (countdown == 10) {broadcast(wss, { action: 'ROUND_PREPARING' });}
+    if (countdown == 10) { broadcast(wss, { action: 'ROUND_PREPARING' }); }
     broadcast(wss, { action: 'SECOND_BEFORE_START', data: countdown });
     broadcast(wss, { action: 'COUNTDOWN', time: countdown });
     countdown--;
-   // if (countdown == 0) await new Promise(resolve => setTimeout(resolve, 1000));
-    if (countdown == 0) {broadcast(wss, { action: 'Justin_was_here'});}
-    if (countdown < 0) {broadcast(wss, { action: 'ROUND_STARTED'});}
+    if (countdown == 0) { broadcast(wss, { action: 'Justin_was_here' }); }
+    if (countdown < 0) { broadcast(wss, { action: 'ROUND_STARTED' }); }
     if (countdown < 0) clearInterval(countdownInterval);
-
   }, 1000);
-  
 
   setTimeout(async () => {
     gameState = 'running';
@@ -48,10 +45,13 @@ const startGame = async (wss) => {
     round.crashMultiplier = crashPoint;
     await round.save();
 
-  //  broadcast(wss, { action: 'ROUND_STARTED', message: 'Round started!' });
-
+    let timeElapsed = 0; // Track time since round started
     const interval = setInterval(async () => {
-      currentMultiplier = parseFloat((currentMultiplier + 0.01).toFixed(2));
+      // Dynamic increment: starts at 0.005, increases with time (e.g., quadratic growth)
+      const increment = 0.005 + 0.0001 * timeElapsed * timeElapsed; // Quadratic increase
+      currentMultiplier = parseFloat((currentMultiplier + increment).toFixed(2));
+      timeElapsed += 0.05; // Increment time by 50ms (0.05 seconds)
+
       broadcast(wss, { action: 'CNT_MULTIPLY', multiplier: currentMultiplier.toFixed(2), data: currentMultiplier.toFixed(2) });
 
       if (currentMultiplier >= crashPoint) {
