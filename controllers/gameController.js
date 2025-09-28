@@ -40,27 +40,32 @@ const startGame = async (wss) => {
   setTimeout(async () => {
     gameState = 'running';
     isRunning = true;
-
+  
     const crashPoint = parseFloat(generateCrashMultiplier());
     round.crashMultiplier = crashPoint;
     await round.save();
-
-    let timeElapsed = 0; // Track time since round started
+  
+    let timeElapsed = 0; // seconds
     const interval = setInterval(async () => {
-      // Dynamic increment: starts at 0.005, increases with time (e.g., quadratic growth)
-      const increment = 0.005 + 0.0001 * timeElapsed * timeElapsed; // Quadratic increase
-      currentMultiplier = parseFloat((currentMultiplier + increment).toFixed(2));
-      timeElapsed += 0.05; // Increment time by 50ms (0.05 seconds)
-
-      broadcast(wss, { action: 'CNT_MULTIPLY', multiplier: currentMultiplier.toFixed(2), data: currentMultiplier.toFixed(2) });
-
+      timeElapsed += 0.05; // 50ms interval
+  
+      // Exact exponential multiplier based on time
+      currentMultiplier = parseFloat(Math.pow(2, timeElapsed / 10).toFixed(2));
+  
+      broadcast(wss, {
+        action: 'CNT_MULTIPLY',
+        multiplier: currentMultiplier.toFixed(2),
+        data: currentMultiplier.toFixed(2)
+      });
+  
       if (currentMultiplier >= crashPoint) {
         clearInterval(interval);
         isRunning = false;
         await endGame(wss, round._id);
       }
-    }, 50);
-  }, 11000);
+    }, 50); // every 50ms
+  }, 11000); // 11s delay before starting the round
+  
 };
 
 // --- End Game ---
