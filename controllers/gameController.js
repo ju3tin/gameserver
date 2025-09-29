@@ -133,7 +133,7 @@ const handleCashout = async (ws, data, wss) => {
   bet.cashedOut = true;
   await round.save();
 
-  ws.send(JSON.stringify({ action: 'CASHOUT_SUCCESS', walletAddress, currency: bet.currency, winnings, balance: user.balances[bet.currency], multiplier: currentMultiplier.toFixed(2) }));
+  ws.send(JSON.stringify({ action: 'CASHOUT_SUCCESS', walletAddress, currency: bet.currency, winnings, balance: user.balances[bet.currency], multiplier: currentMultiplier.toFixed(2), time: timeElapsed }));
 
   broadcast(wss, { action: 'PLAYER_CASHED_OUT', walletAddress, winnings, multiplier: currentMultiplier.toFixed(2)});
 };
