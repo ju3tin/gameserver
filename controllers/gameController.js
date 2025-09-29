@@ -55,7 +55,8 @@ const startGame = async (wss) => {
       broadcast(wss, {
         action: 'CNT_MULTIPLY',
         multiplier: currentMultiplier.toFixed(2),
-        data: currentMultiplier.toFixed(2)
+        data: currentMultiplier.toFixed(2),
+        time: timeElapsed
       });
   
       if (currentMultiplier >= crashPoint) {
