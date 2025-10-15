@@ -4,6 +4,7 @@ const User = require('../models/User');
 let currentMultiplier = 1.0;
 let gameState = 'waiting'; // "waiting" | "running" | "ended"
 let isRunning = false;
+let timeElapsed = 0; // Track time elapsed for cashout calculations
 
 // Generate random crash point
 const generateCrashMultiplier = () => (Math.random() * 10 + 1).toFixed(2);
@@ -19,6 +20,7 @@ const startGame = async (wss) => {
   gameState = 'waiting';
   isRunning = false;
   currentMultiplier = 1.0;
+  timeElapsed = 0;
 
   const round = new GameRound({ startTime: new Date(), crashMultiplier: 0, bets: [] });
   await round.save();
@@ -45,7 +47,7 @@ const startGame = async (wss) => {
     round.crashMultiplier = crashPoint;
     await round.save();
   
-    let timeElapsed = 0; // seconds
+    timeElapsed = 0; // Reset timeElapsed for new round
     const interval = setInterval(async () => {
       timeElapsed += 0.05; // 50ms interval
   
